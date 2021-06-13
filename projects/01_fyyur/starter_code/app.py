@@ -23,6 +23,7 @@ app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+app.config.from_object('config')
 # TODO: connect to a local postgresql database
 migrate=Migrate(app,db)
 
@@ -44,7 +45,7 @@ class Venue(db.Model):
     facebook_link = db.Column(db.String(120))
     website_link=db.Column(db.String(120))
     seeking_talent=db.Column(db.Boolean,default=False)
-    shows=db.relationship('Show',backref='list',lazy=True)
+    shows=db.relationship('Show',backref='venue',lazy=True)
     seeking_description=db.Column(db.String(120))
     num_upcoming_shows=db.Column(db.Integer)
     past_shows=db.Column(db.Integer)
@@ -64,7 +65,7 @@ class Artist(db.Model):
     website_link= db.Column(db.String(120))
     seeking_venue=db.Column(db.Boolean,default=False)
     seeking_description=db.Column(db.String(120))
-    shows=db.relationship('Show',backref='list',lazy=True)
+    shows=db.relationship('Show',backref='artist',lazy=True)
     upcoming_shows=db.Column(db.Integer)
     past_shows=db.Column(db.Integer)
 
@@ -110,27 +111,7 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
-  data=[{
-    "city": "San Francisco",
-    "state": "CA",
-    "venues": [{
-      "id": 1,
-      "name": "The Musical Hop",
-      "num_upcoming_shows": 0,
-    }, {
-      "id": 3,
-      "name": "Park Square Live Music & Coffee",
-      "num_upcoming_shows": 1,
-    }]
-  }, {
-    "city": "New York",
-    "state": "NY",
-    "venues": [{
-      "id": 2,
-      "name": "The Dueling Pianos Bar",
-      "num_upcoming_shows": 0,
-    }]
-  }]
+  data=Venue.query.all()
   return render_template('pages/venues.html', areas=data);
 
 @app.route('/venues/search', methods=['POST'])
