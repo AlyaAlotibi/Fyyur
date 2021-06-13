@@ -1,15 +1,15 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Fyyur | Venues{% endblock %}
 {% block content %}
-{% for area in areas %}
+{% for area in venuesDistinct %}
 <h3>{{ area.city }}, {{ area.state }}</h3>
 	<ul class="items">
-		{% for venue in area.venues %}
+		{% for v in data if v.city==area.city %}
 		<li>
-			<a href="/venues/{{ venue.id }}">
+			<a href="/venues/{{ data.id }}">
 				<i class="fas fa-music"></i>
 				<div class="item">
-					<h5>{{ venue.name }}</h5>
+					<h5>{{ v.name }}</h5>
 				</div>
 			</a>
 		</li>

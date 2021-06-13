@@ -5,6 +5,7 @@
 from datetime import time
 import json
 import dateutil.parser
+from flask.globals import session
 import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for
 from flask_moment import Moment
@@ -111,8 +112,10 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
+  venuesDistinct=db.session.query(Venue.city.distinct().label('city'),Venue.state.label('state'))
   data=Venue.query.all()
-  return render_template('pages/venues.html', areas=data)
+    
+  return render_template('pages/venues.html', data=data , venuesDistinct=venuesDistinct)
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
