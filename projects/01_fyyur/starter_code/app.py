@@ -146,7 +146,7 @@ def show_venue(venue_id):
     "state":data1.state,
     "address":data1.address,
     "phone":data1.phone,
-    "genres":data1.genres ,
+    "genres":data1.genres.split(',') ,
      "image_link":data1.image_link,
       "facebook_link":data1.facebook_link ,
        "website_link":data1.website_link,
@@ -181,7 +181,7 @@ def create_venue_submission():
     venue.city = request.form['city']
     venue.state = request.form['state']
     venue.phone = request.form['phone']
-    venue.genres = request.form['genres']
+    venue.genres = request.form.getlist('genres')
     venue.facebook_link = request.form['facebook_link']
     venue.image_link = request.form['image_link']
     venue.website_link = request.form['website_link']
