@@ -364,6 +364,31 @@ def create_artist_form():
 
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
+  artist=Artist()
+  try:
+        artist.name=request.form['name']
+        artist.city=request.form['city']
+        artist.state=request.form['state']
+        artist.phone=request.form['phone']
+        artist.genres=request.form['genres']
+        artist.facebook_link=request.form['facebook_link']
+        artist.image_link=request.form['image_link']
+        artist.website_link=request.form['website_link']
+        setTrue=request.form['seeking_venue']
+        if setTrue !=None:
+          artist.seeking_venue=True
+        else:
+          artist.seeking_venue=False
+        artist.seeking_description=request.form['seeking_description']
+        db.session.add(artist)
+        db.session.commit()
+        flash('Artist ' + request.form['name'] + ' was successfully listed!')
+  except:
+        db.session.rollback()
+        flash('An error occurred. Artist ' + request.form['name'] + ' could not be listed.')
+        print(sys.exc_info())
+  finally:
+        db.session.close()
 
   return render_template('pages/home.html')
   # called upon submitting the new artist listing form
