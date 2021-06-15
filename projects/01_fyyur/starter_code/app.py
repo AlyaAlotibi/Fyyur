@@ -232,8 +232,10 @@ def delete_venue(venue_id):
   try:
     Venue.query.filter_by(id=venue_id).delete()
     db.session.commit()
+    flash('Venue was successfully deleted!')
   except:
     db.session.rollback()
+    flash('Venue was could not be deleted!')
   finally:
     db.session.close()
   # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
