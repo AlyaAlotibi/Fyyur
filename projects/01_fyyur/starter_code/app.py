@@ -314,27 +314,50 @@ def show_artist(artist_id):
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
   form = ArtistForm()
+  artists=Artist.query.get(artist_id)
   artist={
-    "id": 4,
-    "name": "Guns N Petals",
-    "genres": ["Rock n Roll"],
-    "city": "San Francisco",
-    "state": "CA",
-    "phone": "326-123-5000",
-    "website": "https://www.gunsnpetalsband.com",
-    "facebook_link": "https://www.facebook.com/GunsNPetals",
-    "seeking_venue": True,
-    "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-    "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
+    "id": artists.id,
+    "name": artists.name,
+    "genres": artists.genres.split(','),
+    "city": artists.city,
+    "state": artists.state,
+    "phone": artists.phone,
+    "website": artists.website_link,
+    "facebook_link": artists.facebook_link,
+    "seeking_venue": artists.seeking_venue,
+    "seeking_description":artists.seeking_description,
+    "image_link": artists.image_link
   }
-  # TODO: populate form with fields from artist with ID <artist_id>
+  # TODO1: populate form with fields from artist with ID <artist_id>
   return render_template('forms/edit_artist.html', form=form, artist=artist)
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
-  # TODO: take values from the form submitted, and update existing
+  # TODO1: take values from the form submitted, and update existing
   # artist record with ID <artist_id> using the new attributes
-
+  artist_info=Artist.query.get(artist_id)
+  artist_info.name=request.form['name']
+  artist_info.genres=request.form.getlist('genres')
+  artist_info.city=request.form['city']
+  artist_info.state=request.form['state']
+  artist_info.phone=request.form['phone']
+  artist_info.website_link=request.form['website']
+  artist_info.facebook_link=request.form['facebook_link']
+  isSet=request.form['seeking_venue']
+  if isSet !=None:
+    artist_info.seeking_venue=True
+  else:
+    artist_info.seeking_venue=False
+  artist_info.seeking_description=request.form['seeking_description']
+  artist_info.image_link=request.form['image_link']
+  try:
+    db.session.commit()
+    flash('Artist ' + request.form['name'] + ' was successfully updated!')
+  except:
+    db.session.rollback()
+    flash('Artist ' + request.form['name'] + ' could not be updated!')
+  finally:
+    db.session.close()
   return redirect(url_for('show_artist', artist_id=artist_id))
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
