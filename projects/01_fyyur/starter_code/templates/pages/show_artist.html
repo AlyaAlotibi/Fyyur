@@ -11,7 +11,7 @@
 		</p>
 		<div class="genres">
 			{% for genre in artist.genres %}
-			<span class="genre">{{ genre }}</span>
+			<span class="genre">{{ genre.replace('{','').replace('}','') }}</span>
 			{% endfor %}
 		</div>
 		<p>
