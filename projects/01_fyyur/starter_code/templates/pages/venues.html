@@ -6,7 +6,7 @@
 	<ul class="items">
 		{% for v in data if v.city==area.city %}
 		<li>
-			<a href="/venues/{{ data.id }}">
+			<a href="/venues/{{ v.id }}">
 				<i class="fas fa-music"></i>
 				<div class="item">
 					<h5>{{ v.name }}</h5>
