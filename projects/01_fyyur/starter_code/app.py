@@ -265,7 +265,7 @@ def search_artists():
 @app.route('/artists/<int:artist_id>')
 def show_artist(artist_id):
   # shows the artist page with the given artist_id
-  # TODO: replace with real artist data from the artist table, using artist_id
+  # TODO1: replace with real artist data from the artist table, using artist_id
   data1=Artist.query.get(artist_id)
     #"upcoming_shows": [],
     #"past_shows_count": 1,
@@ -340,26 +340,54 @@ def edit_artist_submission(artist_id):
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
   form = VenueForm()
+  venues=Venue.query.get(venue_id)
   venue={
-    "id": 1,
-    "name": "The Musical Hop",
-    "genres": ["Jazz", "Reggae", "Swing", "Classical", "Folk"],
-    "address": "1015 Folsom Street",
-    "city": "San Francisco",
-    "state": "CA",
-    "phone": "123-123-1234",
-    "website": "https://www.themusicalhop.com",
-    "facebook_link": "https://www.facebook.com/TheMusicalHop",
-    "seeking_talent": True,
-    "seeking_description": "We are on the lookout for a local artist to play every two weeks. Please call us.",
-    "image_link": "https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60"
+    "id": venues.id,
+    "name": venues.name,
+    "genres": venues.genres.split(','),
+    "address": venues.address,
+    "city": venues.city,
+    "state": venues.state,
+    "phone": venues.phone,
+    "website": venues.website_link,
+    "facebook_link": venues.facebook_link,
+    "seeking_talent": venues.seeking_talent,
+    "seeking_description": venues.seeking_description,
+    "image_link": venues.image_link
   }
-  # TODO: populate form with values from venue with ID <venue_id>
+  # TODO1: populate form with values from venue with ID <venue_id>
   return render_template('forms/edit_venue.html', form=form, venue=venue)
 
 @app.route('/venues/<int:venue_id>/edit', methods=['POST'])
 def edit_venue_submission(venue_id):
-  # TODO: take values from the form submitted, and update existing
+  update_venue=Venue.query.get(venue_id)
+  if request.method == "POST":
+    update_venue.name=request.form['name']
+    update_venue.genres=request.form.getlist('genres')
+    update_venue.address=request.form['address']
+    update_venue.city=request.form['city']
+    update_venue.state=request.form['state']
+    update_venue.phone=request.form['phone']
+    update_venue.website_link=request.form['website_link']
+    update_venue.image_link=request.form['image_link']
+    update_venue.facebook_link=request.form['facebook_link']
+    update_venue.seeking_description=request.form['seeking_description']
+    setTrue=request.form['seeking_talent']
+    if setTrue !=None:
+      update_venue.seeking_talent=True
+    else:
+      update_venue.seeking_talent=False
+  try:
+    db.session.commit()
+    flash('Venue ' + request.form['name'] + ' was successfully updated!')
+  except:
+     db.session.rollback()
+     flash('Venue ' + request.form['name'] + ' could not be updated!')
+  finally:
+    db.session.close()
+
+
+  # TODO1: take values from the form submitted, and update existing
   # venue record with ID <venue_id> using the new attributes
   return redirect(url_for('show_venue', venue_id=venue_id))
 
