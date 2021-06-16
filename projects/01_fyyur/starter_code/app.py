@@ -170,7 +170,7 @@ def show_venue(venue_id):
 
       }
     
-  return render_template('pages/show_venue.html', venue=data ,showi=show_info)
+  return render_template('pages/show_venue.html', venue=data )
 
 #  Create Venue
 #  ----------------------------------------------------------------
