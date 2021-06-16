@@ -8,7 +8,7 @@ import json
 import dateutil.parser
 from flask.globals import session
 import babel
-from flask import Flask, render_template, request, Response, flash, redirect, url_for
+from flask import Flask, render_template, request, Response, flash, redirect, url_for,jsonify
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 import logging
@@ -153,7 +153,7 @@ def create_venue_submission():
     venue.facebook_link = request.form['facebook_link']
     venue.image_link = request.form['image_link']
     venue.website_link = request.form['website_link']
-    setTrue = request.form['seeking_talent']
+    setTrue = request.form.get('seeking_talent')
     if setTrue !=None:
       venue.seeking_talent=True
     else:
@@ -177,6 +177,7 @@ def delete_venue(venue_id):
     Venue.query.filter_by(id=venue_id).delete()
     db.session.commit()
     flash('Venue was successfully deleted!')
+    redirect(url_for('home.html'))
   except:
     db.session.rollback()
     flash('Venue was could not be deleted!')
@@ -184,7 +185,7 @@ def delete_venue(venue_id):
     db.session.close()
   # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
   # clicking that button delete it from the db then redirect the user to the homepage
-  return render_template('pages/home.html')
+  return jsonify({'success':True})
 
 #  Artists
 #  ----------------------------------------------------------------
@@ -365,7 +366,7 @@ def create_artist_submission():
         artist.facebook_link=request.form['facebook_link']
         artist.image_link=request.form['image_link']
         artist.website_link=request.form['website_link']
-        setTrue=request.form['seeking_venue']
+        setTrue=request.form.get('seeking_venue')
         if setTrue !=None:
           artist.seeking_venue=True
         else:
