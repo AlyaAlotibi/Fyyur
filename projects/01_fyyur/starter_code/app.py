@@ -223,7 +223,7 @@ def delete_venue(venue_id):
     db.session.close()
   # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
   # clicking that button delete it from the db then redirect the user to the homepage
-  return None
+  return render_template('pages/home.html')
 
 #  Artists
 #  ----------------------------------------------------------------
@@ -313,9 +313,9 @@ def edit_artist_submission(artist_id):
   artist_info.city=request.form['city']
   artist_info.state=request.form['state']
   artist_info.phone=request.form['phone']
-  artist_info.website_link=request.form['website']
+  artist_info.website_link=request.form['website_link']
   artist_info.facebook_link=request.form['facebook_link']
-  isSet=request.form['seeking_venue']
+  isSet=request.form.get('seeking_venue')
   if isSet !=None:
     artist_info.seeking_venue=True
   else:
@@ -366,7 +366,7 @@ def edit_venue_submission(venue_id):
     update_venue.image_link=request.form['image_link']
     update_venue.facebook_link=request.form['facebook_link']
     update_venue.seeking_description=request.form['seeking_description']
-    setTrue=request.form['seeking_talent']
+    setTrue=request.form.get('seeking_talent')
     if setTrue !=None:
       update_venue.seeking_talent=True
     else:
