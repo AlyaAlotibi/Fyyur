@@ -78,7 +78,7 @@ class Show(db.Model):
   start_time=db.Column(db.DateTime)
   venue_id=db.Column(db.Integer,db.ForeignKey('Venue.id'))
   artist_id=db.Column(db.Integer,db.ForeignKey('Artist.id'))
-  coming_show = db.Column(db.Boolean)
+  
 
 
 
