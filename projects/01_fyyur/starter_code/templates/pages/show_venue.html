@@ -77,5 +77,22 @@
 </section>
 
 <a href="/venues/{{ venue.id }}/edit"><button class="btn btn-primary btn-lg">Edit</button></a>
-{% endblock %}
+<button id="deletebtn" data-id="{{ venue.id }}" class="btn btn-primary btn-lg" aria-label='delete item' type='button'>&cross; Delete</button></li>
 
+
+
+<script>
+    deleteBtns = document.getElementById('deletebtn');
+	deleteBtns.onclick = function(e) {
+    venue_id = e.target.dataset['id'];
+	fetch('/venues/' + venue_id, {
+			   method: 'DELETE'
+			 }).then(function(response){
+				 document.location.href="/";
+				
+                })
+
+			 }
+			
+</script>
+{% endblock %}

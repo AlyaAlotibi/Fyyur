@@ -177,7 +177,6 @@ def delete_venue(venue_id):
     Venue.query.filter_by(id=venue_id).delete()
     db.session.commit()
     flash('Venue was successfully deleted!')
-    redirect(url_for('home.html'))
   except:
     db.session.rollback()
     flash('Venue was could not be deleted!')
