@@ -19,6 +19,7 @@ from flask_migrate import Migrate
 import datetime
 from sqlalchemy.exc import OperationalError, ProgrammingError
 import sys
+from model import db,Venue,Artist,Show
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -26,14 +27,14 @@ import sys
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
-db = SQLAlchemy(app)
 app.config.from_object('config')
+db.init_app(app)
 migrate=Migrate(app,db)
 
 #----------------------------------------------------------------------------#
 # Models.
 #----------------------------------------------------------------------------#
-from model import db,Venue,Artist,Show
+
 
 def __repr__(self):
     return f'<Venue {self.id} {self.name} {self.city} {self.state} {self.address} {self.phone} {self.genres} {self.image_link} {self.facebook_link} {self.website_link} {self.seeking_description} {self.num_upcoming_shows} {self.seeking_talent} {self.past_shows}>'
