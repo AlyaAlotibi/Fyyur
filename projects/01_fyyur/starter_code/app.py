@@ -239,7 +239,7 @@ def show_artist(artist_id):
     "city": data1.city,
     "state": data1.state,
     "phone": data1.phone,
-    "website": data1.website_link,
+    "website_link": data1.website_link,
     "facebook_link": data1.facebook_link,
     "seeking_venue": data1.seeking_venue,
     "seeking_description": data1.seeking_description,
